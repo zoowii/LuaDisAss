@@ -1,49 +1,58 @@
-#include "Buffer.h"
+﻿#include "Buffer.h"
+#include <vector>
 
 size_t Buffer::read(std::string &buffer, size_t amount) {
-	char tbuf[amount];
-	size_t ret = readBytes(tbuf, amount);
+    std::vector<char> tbuf;
+    tbuf.resize(amount);
+	size_t ret = readBytes(tbuf.data(), amount);
 	if (ret != amount) {
 		return ret;
 	}
 
-	buffer.assign(tbuf, amount);
+	buffer.assign(tbuf.data(), amount);
 	return amount;
 }
 
 
-std::pair<bool, std::string> Buffer::read(int &number) {
-	if (readBytes(reinterpret_cast<char*>(&number), sizeof(int)) != sizeof(int)) {
-		return std::make_pair(false, "read failed; end of stream?");
+Util::BoolRes Buffer::read(__int32 &number) {
+	if (readBytes(reinterpret_cast<char*>(&number), sizeof(__int32)) != sizeof(__int32)) {
+		return Util::BoolRes(false, "read failed; end of stream?");
 	}
-	return std::make_pair(true, "");
+	return Util::BoolRes(true, "");
+}
+
+Util::BoolRes Buffer::read(__int64 &number) {
+  if (readBytes(reinterpret_cast<char*>(&number), sizeof(__int64)) != sizeof(__int64)) {
+    return Util::BoolRes(false, "read failed; end of stream?");
+  }
+  return Util::BoolRes(true, "");
 }
 
 
-std::pair<bool, std::string> Buffer::read(long double &number) {
+Util::BoolRes Buffer::read(long double &number) {
 	if (readBytes(reinterpret_cast<char*>(&number), sizeof(long double)) != sizeof(long double)) {
-		return std::make_pair(false, "read failed; end of stream?");
+		return Util::BoolRes(false, "read failed; end of stream?");
 	}
-	return std::make_pair(true, "");
+	return Util::BoolRes(true, "");
 }
 
-std::pair<bool, std::string> Buffer::read(double &number) {
+Util::BoolRes Buffer::read(double &number) {
 	if (readBytes(reinterpret_cast<char*>(&number), sizeof(double)) != sizeof(double)) {
-		return std::make_pair(false, "read failed; end of stream?");
+		return Util::BoolRes(false, "read failed; end of stream?");
 	}
-	return std::make_pair(true, "");
+	return Util::BoolRes(true, "");
 }
 
-std::pair<bool, std::string> Buffer::read(long &number) {
+Util::BoolRes Buffer::read(long &number) {
 	if (readBytes(reinterpret_cast<char*>(&number), sizeof(long)) != sizeof(long)) {
-		return std::make_pair(false, "read failed; end of stream?");
+		return Util::BoolRes(false, "read failed; end of stream?");
 	}
-	return std::make_pair(true, "");
+	return Util::BoolRes(true, "");
 }
 
-std::pair<bool, std::string> Buffer::read(unsigned char &byte) {
+Util::BoolRes Buffer::read(unsigned char &byte) {
 	if (readBytes(reinterpret_cast<char*>(&byte), sizeof(unsigned char)) != sizeof(unsigned char)) {
-		return std::make_pair(false, "read failed; end of stream?");
+		return Util::BoolRes(false, "read failed; end of stream?");
 	}
-	return std::make_pair(true, "");
+	return Util::BoolRes(true, "");
 }
